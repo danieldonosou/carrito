@@ -45,20 +45,44 @@ function vaciarCarrito(){
     while(listaCursos.firstChild){
         listaCursos.removeChild(listaCursos.firstChild);
     }
+    //vaciar local storage
+    vaciarLocalStorage();
+
     return false;
+}
+
+//funcion que vacia el LS
+function vaciarLocalStorage()
+{
+    localStorage.clear();
 }
 
 //funcion que elimina el curso del carrito
 function eliminarCurso(e){
     e.preventDefault();
-    let curso;
+    let cursoId;
     if(e.target.classList.contains('borrar-curso'))
     {
         e.target.parentElement.parentElement.remove();
+        cursoId=e.target.parentElement.parentElement.querySelector('a').getAttribute('data-id');
+        console.log(cursoId);
+        eliminarCursoLocalStorage(cursoId);
     }
    
 }
 
+//funcion de eliminar curso del LS
+function eliminarCursoLocalStorage(cursoId)
+{
+    let cursos= obtenerCursosLocalStorage();
+    cursos.forEach(function (curso, index){
+        if(curso.id==cursoId)
+        {
+            cursos.splice(index, 1);
+        }
+    });
+    localStorage.setItem('cursos', JSON.stringify(cursos));
+}
 
 //funcion que añade el curso al carrito
 function comprarCurso(e){
